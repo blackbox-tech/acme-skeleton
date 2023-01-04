@@ -89,7 +89,7 @@ endef
 
 include build.mk
 
-test: ${tests} ${run_tests}
+test: ${static_libs} ${shared_libs} ${tests} ${run_tests}
 all: ${static_libs} ${shared_libs} ${bins} sym_links
 clean:
 	rm -rf ${build_dir}
