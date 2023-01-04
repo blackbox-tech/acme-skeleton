@@ -21,6 +21,9 @@ $ python setup.py build
 $ export PYTHONPATH=${PWD}/packages
 ```
 
+_* note these conda packages need to be already installed in the environment that you are using for development:_
+```make cxx-compiler pybind11 boost pytest```
+
 C++ and python test harnesses are automatically run by conda-build, but can be run manually:
 
 ```bash
