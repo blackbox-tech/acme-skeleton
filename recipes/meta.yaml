@@ -1,0 +1,45 @@
+{% set setup_data = load_setup_py_data() %}
+
+package:
+  name:     acme-skeleton
+  version:  {{ setup_data.version }}
+  platform: linux
+  arch:     x86_64
+
+source:
+  git_rev:  {{ setup_data.version }}
+  git_url:  git@github.com:blackbox-tech/acme-skeleton.git
+
+requirements:
+  host:
+    - python=3.11
+  build:
+    - python=3.11
+    - setuptools
+    - {{ compiler("cxx") }}
+    - make
+    - boost
+    - pybind11
+  run:
+    - python=3.11
+    - pytest
+    - pytest-mock
+    - pytest-asyncio
+    - pre-commit
+
+test:
+  imports:
+    - acme.skeleton
+  source_files:
+    - tests/test_*.py
+  requires:
+    - make
+    - pytest
+    - pytest-mock
+    - pytest-asyncio
+  commands:
+    - make build=release all test && pytest tests/
+
+about:
+  home:     https://github.com/blackbox-tech/acme-skeleton
+  license:  PROPRIETARY
