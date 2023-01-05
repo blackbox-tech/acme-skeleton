@@ -3,7 +3,7 @@
 """
 Python setuptools config to package the all the components of this repository.
 
-Note conda load_setup_py_data() requires that this script is runnable during the build stage so we avoid non default
+Note conda load_setup_py_data() requires that this script is runnable during the build stage, so we avoid non default
 classes such as Pybind11Extension as these packages are unlikely to be installed in the conda base environment.
 """
 import os
@@ -82,11 +82,11 @@ if __name__ == "__main__":
     setup(
         name="acme-skeleton",
         version="0.0.0",  # automatically updated by deploy tool
-        package_dir={"acme": "acme"},
         packages=find_namespace_packages(include=["acme.*"]),
-        scripts=[str(f) for f in Path("scripts").glob("**/*") if f.is_file()],
-        cmdclass={"build_ext": BuildExtensions, "install": Install, "clean": Clean},
-        ext_modules=ext_modules,
+        package_dir={"acme": "acme"},
         include_package_data=True,
-        zip_safe=False,  # implicit namespaces do not appear to import from zipped egg
+        scripts=[str(f) for f in Path("scripts").glob("**/*") if f.is_file()],
+        ext_modules=ext_modules,
+        zip_safe=False,
+        cmdclass={"build_ext": BuildExtensions, "install": Install, "clean": Clean},
     )
