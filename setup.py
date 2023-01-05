@@ -38,7 +38,8 @@ class BuildExtensions(build_ext):
 
 class Install(install):
     """
-    Extends the standard installer to build the pure C++ dependencies and install the headers, libraries and binaries.
+    Extends the standard installer to build the pure C++ dependencies and install the headers, libraries and binaries as
+    well as the non-platform specific shared files.
     """
     def run(self):
         subprocess.check_call("make build=release", shell=True)

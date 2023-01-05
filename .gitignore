@@ -1,4 +1,4 @@
-# Byte-compiled / optimized / DLL files
+# Byte-compiled / optimized
 __pycache__/
 .pytest_cache/
 *.py[cod]
@@ -15,7 +15,7 @@ dist/
 *.egg-info/
 .eggs/
 
-# CPP output and libs
+# C++ output
 *.o
 *.d
 *.so
