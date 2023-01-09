@@ -3,6 +3,6 @@
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(helloworld, module) {
+PYBIND11_MODULE(pyhelloworld, module) {
     module.def("greeting", &acme::skeleton::greeting);
 }

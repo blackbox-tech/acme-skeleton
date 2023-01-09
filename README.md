@@ -13,6 +13,8 @@ the conda environment, rather than the system compiler/libraries to avoid any AB
 distribution. There are also some subtle features like setting rpath=$ORIGIN to avoid the need to set LD_LIBRARY_PATH
 when doing local development.
 
+## development
+
 To develop and test applications locally in this repository you first need to build the components and set the
 PYTHONPATH in your local environment:
 
@@ -36,3 +38,16 @@ You can also activate some example git pre-commit hooks by running:
 ```bash
 $ pre-commit install
 ```
+
+## layout
+
+The root folders in the repository contain the following:
+
+* **python/** - _source code for the pure python modules_
+* **tests/** - _python pytest harnesses_
+* **scripts/** - _python executable scripts_
+* **src/** - _source code for C++ objects_
+* **include/** - _C++ libraries header files_
+* **bin/** - _symlink to built C++ executable binaries_
+* **lib/** - _symlink to built C++ libraries_
+* **packages/** - _symlink to built python packages (both C++ extensions and pure python)_

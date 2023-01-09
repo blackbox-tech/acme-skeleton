@@ -67,8 +67,8 @@ class Clean(clean):
 
 # C++ python extensions are compiled and packaged using setuptools, not using the Makefile.
 ext_modules = [
-    Extension(name="acme.skeleton.helloworld",
-              sources=["src/acme/skeleton/py_helloworld.cpp"],
+    Extension(name="acme.skeleton.pyhelloworld",
+              sources=["src/acme/skeleton/pyhelloworld.cpp"],
               include_dirs=["include"],
               extra_compile_args=["-fvisibility=hidden", "-std=c++17"],  # required for pybind11
               library_dirs=["lib"],
@@ -82,8 +82,8 @@ if __name__ == "__main__":
     setup(
         name="acme-skeleton",
         version="0.0.0",  # automatically updated by deploy tool
-        packages=find_namespace_packages(include=["acme.*"]),
-        package_dir={"acme": "acme"},
+        packages=find_namespace_packages(where="python"),
+        package_dir={"": "python"},
         include_package_data=True,
         scripts=[str(f) for f in Path("scripts").glob("**/*") if f.is_file()],
         ext_modules=ext_modules,
