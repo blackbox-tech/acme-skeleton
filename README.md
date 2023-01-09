@@ -48,6 +48,7 @@ The root folders in the repository contain the following:
 * **scripts/** - _python executable scripts_
 * **src/** - _source code for C++ objects_
 * **include/** - _C++ libraries header files_
+* **share/** - _language agnostic data files such as config_
 * **bin/** - _symlink to built C++ executable binaries_
 * **lib/** - _symlink to built C++ libraries_
 * **packages/** - _symlink to built python packages (both C++ extensions and pure python)_
