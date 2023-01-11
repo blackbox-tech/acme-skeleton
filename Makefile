@@ -35,7 +35,7 @@ cppflags.release := -DNDEBUG -flto -O3
 # Enable relative run-time linking to avoid setting LD_LIBRARY_PATH (works locally and in conda)
 ldflags := -march=${arch} -fpic -Wall -isysroot ${CONDA_BUILD_SYSROOT} '-Wl,-rpath,$$ORIGIN/../lib' -L${lib_dir} -L${CONDA_PREFIX}/lib
 ldflags.debug :=
-ldflags.release := -flto -O3 -fuse-linker-plugin
+ldflags.release := -flto=auto -O3 -fuse-linker-plugin
 syslibs := dl rt
 
 # Enable link time optimization in static libraries using the gcc wrapper of AR
