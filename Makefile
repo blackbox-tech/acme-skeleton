@@ -17,6 +17,10 @@ arch := x86-64
 ################################################################################
 # Locations
 
+inc_sysroot := ${CONDA_BUILD_SYSROOT}
+inc_conda := ${CONDA_PREFIX}/include
+inc_python := $(shell python -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())")
+
 src_dir := ${CURDIR}/src
 inc_dir := ${CURDIR}/include
 build_dir := ${CURDIR}/build/$(firstword $(shell uname -s))-$(firstword $(shell uname -r))-${arch}-${build}
@@ -28,7 +32,7 @@ obj_dir := ${build_dir}/obj
 ################################################################################
 # Common flags and libraries (lowercase, target specific are uppercase)
 
-cppflags := -march=${arch} -fpic -std=c++17 -Wall -isysroot ${CONDA_BUILD_SYSROOT} -I${inc_dir} -isystem ${CONDA_PREFIX}/include
+cppflags := -march=${arch} -fpic -std=c++17 -Wall -isysroot ${inc_sysroot} -I${inc_dir} -isystem ${inc_conda} -isystem ${inc_python}
 cppflags.debug := -g3
 cppflags.release := -DNDEBUG -flto -O3
 
@@ -57,17 +61,17 @@ endef
 
 define STATIC_LIBRARY  # takes 2 arguments, library name and paths to cpp files
   static_libs += ${lib_dir}/$(addprefix lib,$(addsuffix .a,${1}))
-  $(call BUILD_TARGET,${lib_dir}/$(addprefix lib,$(addsuffix .a,${1})),${obj_dir}/$(addsuffix .o,$(basename ${2}))))
+  $(call BUILD_TARGET,${lib_dir}/$(addprefix lib,$(addsuffix .a,${1})),$(addprefix ${obj_dir}/, $(addsuffix .o,$(basename ${2})))))
 endef
 
 define SHARED_LIBRARY  # takes 2 arguments, library name and paths to cpp files
   shared_libs += ${lib_dir}/$(addprefix lib,$(addsuffix .so,${1}))
-  $(call BUILD_TARGET,${lib_dir}/$(addprefix lib,$(addsuffix .so,${1})),${obj_dir}/$(addsuffix .o,$(basename ${2}))))
+  $(call BUILD_TARGET,${lib_dir}/$(addprefix lib,$(addsuffix .so,${1})),$(addprefix ${obj_dir}/, $(addsuffix .o,$(basename ${2})))))
 endef
 
 define EXECUTABLE  # takes 2 arguments, executable name and paths to cpp files
   bins += ${bin_dir}/${1}
-  $(call BUILD_TARGET,${bin_dir}/${1},${obj_dir}/$(addsuffix .o,$(basename ${2}))))
+  $(call BUILD_TARGET,${bin_dir}/${1},$(addprefix ${obj_dir}/, $(addsuffix .o,$(basename ${2})))))
 endef
 
 define RUN_TEST  # takes 1 argument, test harness name
@@ -79,10 +83,9 @@ endef
 
 define TEST_HARNESS  # build and run, takes 2 arguments, target name and paths to cpp files
   tests += ${test_dir}/${1}
-  $(call BUILD_TARGET,${test_dir}/${1},${obj_dir}/$(addsuffix .o,$(basename ${2}))))
+  $(call BUILD_TARGET,${test_dir}/${1},$(addprefix ${obj_dir}/, $(addsuffix .o,$(basename ${2})))))
   $(call RUN_TEST,${1})
 endef
-
 
 ################################################################################
 # Project Targets
