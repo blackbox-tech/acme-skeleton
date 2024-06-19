@@ -66,15 +66,19 @@ class Clean(clean):
 
 
 # C++ python extensions are compiled and packaged using setuptools, not using the Makefile.
+COMMON_EXT_ARGS = {
+    "include_dirs": ["include"],
+    "library_dirs": ["lib", f"{os.environ.get('CONDA_PREFIX', os.environ.get('PREFIX'))}/lib"],  # local build or an installation
+    "extra_compile_args": ["-fvisibility=hidden", "-std=c++20"],  # required for pybind11
+    "extra_link_args": ["-Wl,-rpath,$ORIGIN/../../../../lib"],  # conda-build will also append the env rpath
+    "language": "c++",
+}
+
+# C++ python extensions are compiled and packaged using setuptools, not using the Makefile.
 ext_modules = [
     Extension(name="acme.skeleton.pyhelloworld",
               sources=["src/acme/skeleton/pyhelloworld.cpp"],
-              include_dirs=["include"],
-              extra_compile_args=["-fvisibility=hidden", "-std=c++17"],  # required for pybind11
-              library_dirs=["lib"],
-              extra_link_args=["-Wl,-rpath,$ORIGIN/../../../../lib"],  # conda-build will also append the env rpath
-              libraries=["acme-skeleton-shared"],
-              language="c++")
+              libraries=["acme-skeleton-shared"], **COMMON_EXT_ARGS),
 ]
 
 
