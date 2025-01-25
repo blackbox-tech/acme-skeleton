@@ -1,19 +1,16 @@
 # Byte-compiled / optimized
 __pycache__/
 .pytest_cache/
+*.egg-info/
+.eggs/
 *.py[cod]
-
-# Notebooks
-.ipynb_checkpoints
-
-# PyCharm
-.idea/
 
 # Distribution / packaging
 build/
 dist/
-*.egg-info/
-.eggs/
+bin/
+lib/
+packages/
 
 # C++ output
 *.o
@@ -21,5 +18,15 @@ dist/
 *.so
 *.a
 
+# Notebooks
+.ipynb_checkpoints
+
+# PyCharm
+.idea/
+
+# Ignore all log files
+logs/
+*.log
+
 # Large files get managed via git lfs extension
-*.{zip,tgz,gz,bz2,zstd} filter=lfs diff=lfs merge=lfs -text
+*.{zip,tgz,gz,bz2,zstd,conda} filter=lfs diff=lfs merge=lfs -text

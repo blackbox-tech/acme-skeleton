@@ -17,15 +17,8 @@ arch := x86-64
 ################################################################################
 # Locations
 
-# Local build or an installation
-ifdef CONDA_PREFIX
-ENV := $(CONDA_PREFIX)
-else
-ENV := $(PREFIX)
-endif
-
 inc_sysroot := ${CONDA_BUILD_SYSROOT}
-inc_conda := ${ENV}/include
+inc_conda := ${CONDA_PREFIX}/include
 inc_python := $(shell python -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())")
 
 src_dir := ${CURDIR}/src
@@ -44,7 +37,7 @@ cppflags.debug := -g3
 cppflags.release := -DNDEBUG -flto -O3
 
 # Enable relative run-time linking to avoid setting LD_LIBRARY_PATH (works locally and in conda)
-ldflags := -march=${arch} -fpic -Wall -isysroot ${CONDA_BUILD_SYSROOT} '-Wl,-rpath,$$ORIGIN/../lib' -L${lib_dir} -L${ENV}/lib
+ldflags := -march=${arch} -fpic -Wall -isysroot ${CONDA_BUILD_SYSROOT} '-Wl,-rpath,$$ORIGIN/../lib' -L${lib_dir} -L${CONDA_PREFIX}/lib
 ldflags.debug :=
 ldflags.release := -flto=auto -O3 -fuse-linker-plugin
 syslibs := dl rt

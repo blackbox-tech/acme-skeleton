@@ -67,9 +67,9 @@ class Clean(clean):
 
 # C++ python extensions are compiled and packaged using setuptools, not using the Makefile.
 COMMON_EXT_ARGS = {
-    "include_dirs": ["include"],
-    "library_dirs": ["lib", f"{os.environ.get('CONDA_PREFIX', os.environ.get('PREFIX'))}/lib"],  # local build or an installation
-    "extra_compile_args": ["-fvisibility=hidden", "-std=c++20"],  # required for pybind11
+    "include_dirs": ["include", f"{sys.prefix}/include"],
+    "library_dirs": ["lib", f"{sys.prefix}/lib"],
+    "extra_compile_args": ["-fvisibility=hidden", "-std=c++2b"],  # required for pybind11
     "extra_link_args": ["-Wl,-rpath,$ORIGIN/../../../../lib"],  # conda-build will also append the env rpath
     "language": "c++",
 }
