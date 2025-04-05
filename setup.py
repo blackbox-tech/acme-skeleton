@@ -6,15 +6,20 @@ Python setuptools config to package the all the components of this repository.
 Note conda load_setup_py_data() requires that this script is runnable during the build stage, so we avoid non default
 classes such as Pybind11Extension as these packages are unlikely to be installed in the conda base environment.
 """
+
 import os
+import shutil
 import sys
 import subprocess
-from setuptools import setup, find_namespace_packages, Extension
+
+from pathlib import Path
+from setuptools import setup, find_namespace_packages, Extension, Command
 from setuptools.command.build_ext import build_ext
 from setuptools.command.install import install
-from distutils.command.clean import clean
-from distutils.dir_util import copy_tree
-from pathlib import Path
+
+from setuptools import setup, find_namespace_packages, Extension, Command
+from setuptools.command.build_ext import build_ext
+from setuptools.command.install import install
 
 
 class BuildExtensions(build_ext):
@@ -43,24 +48,30 @@ class Install(install):
     """
     def run(self):
         subprocess.check_call("make build=release", shell=True)
-        copy_tree("include", f"{sys.prefix}/include")
-        copy_tree("lib", f"{sys.prefix}/lib")
-        copy_tree("bin", f"{sys.prefix}/bin")
-        copy_tree("share", f"{sys.prefix}/share")
+        shutil.copytree("include", f"{sys.prefix}/include", dirs_exist_ok=True)
+        shutil.copytree("lib", f"{sys.prefix}/lib", dirs_exist_ok=True)
+        shutil.copytree("bin", f"{sys.prefix}/bin", dirs_exist_ok=True)
+        shutil.copytree("share", f"{sys.prefix}/share", dirs_exist_ok=True)
         install.run(self)  # call parent
         return
 
 
-class Clean(clean):
+class Clean(Command):
     """
-    Extends the standard clean command.
+    Implement the clean command (unlike the deprecated distutils there is no setuptools.command.clean command to extend)
     """
+    def initialize_options(self) -> None:
+        return
+
+    def finalize_options(self) -> None:
+        return
+
     def run(self):
-        clean.run(self)  # call parent, this removes the temp files only
         packages_link = Path("packages")
         packages_link.unlink(missing_ok=True)
-        subprocess.check_call(f"rm -rf {self.get_finalized_command('build_py').build_lib}", shell=True)
-        subprocess.check_call(f"rm -rf {self.get_finalized_command('build').build_scripts}", shell=True)
+        shutil.rmtree(self.get_finalized_command("build_py").build_lib)
+        shutil.rmtree(self.get_finalized_command("build").build_scripts)
+        shutil.rmtree(self.get_finalized_command("build").build_temp)
         subprocess.check_call("make build=release clean", shell=True)
         return
 
