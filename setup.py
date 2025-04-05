@@ -8,10 +8,14 @@ classes such as Pybind11Extension as these packages are unlikely to be installed
 """
 
 import os
+import shutil
 import sys
 import subprocess
+
 from pathlib import Path
-from shutil import copytree
+from setuptools import setup, find_namespace_packages, Extension, Command
+from setuptools.command.build_ext import build_ext
+from setuptools.command.install import install
 
 from setuptools import setup, find_namespace_packages, Extension, Command
 from setuptools.command.build_ext import build_ext
@@ -44,10 +48,10 @@ class Install(install):
     """
     def run(self):
         subprocess.check_call("make build=release", shell=True)
-        copytree("include", f"{sys.prefix}/include", dirs_exist_ok=True)
-        copytree("lib", f"{sys.prefix}/lib", dirs_exist_ok=True)
-        copytree("bin", f"{sys.prefix}/bin", dirs_exist_ok=True)
-        copytree("share", f"{sys.prefix}/share", dirs_exist_ok=True)
+        shutil.copytree("include", f"{sys.prefix}/include", dirs_exist_ok=True)
+        shutil.copytree("lib", f"{sys.prefix}/lib", dirs_exist_ok=True)
+        shutil.copytree("bin", f"{sys.prefix}/bin", dirs_exist_ok=True)
+        shutil.copytree("share", f"{sys.prefix}/share", dirs_exist_ok=True)
         install.run(self)  # call parent
         return
 
