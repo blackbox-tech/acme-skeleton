@@ -12,16 +12,17 @@ source:
 
 requirements:
   host:
-    - python=3.12
+    - python=3.13
+    - setuptools
   build:
-    - python=3.12
+    - python=3.13
     - setuptools
     - {{ compiler("cxx") }}
     - make
     - boost
     - pybind11
   run:
-    - python=3.12
+    - python=3.13
     - pytest
     - pytest-mock
     - pytest-asyncio
